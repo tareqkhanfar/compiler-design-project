@@ -57,7 +57,187 @@ public class Parser {
     }
 
     private void stmtList() {
+        statement() ;
+        while (token.getTokenName().equals(";")){
+            getToken();
+            statement();
+        }
+    }
 
+    private void statement() {
+      if (token.getTokenName().equals("readint")){
+          readStmt() ;
+      }
+      else if (token.getTokenName().equals("writeint")){
+            writeStmt() ;
+      }
+      else if (token.getTokenName().equals("if")){
+          ifStmt() ;
+      }
+      else if (token.getTokenName().equals("loop")) {
+          repateStmt() ;
+      }
+      else if (token.getTokenName().equals("while")){
+          whileStmt();
+      }
+      else if (token.getTokenName().equals("exit")){
+          exitStmt();
+      }
+      else if (token.getTokenName().equals("call")){
+          callStmt();
+      }
+      else if (Character.isLetter(token.getTokenName().charAt(0))){
+          assStmt();
+      }
+      else if (token.getTokenName().equals(";")){
+          getToken();
+      }
+      else if (!token.getTokenName().equals(";")) {
+          reportError(token);
+      }
+
+    }
+
+    private void assStmt() {
+       name();
+       if (token.getTokenName().equals(":=")){
+           getToken();
+       }
+       else {
+           reportError(token);
+       }
+       exp();
+    }
+
+    private void exp() {
+       term();
+       while (token.getTokenName().equals("+") || token.getTokenName().equals("-")){
+           addOperation();
+           term();
+       }
+    }
+    private void addOperation() {
+       if (token.getTokenName().equals("+") || token.getTokenName().equals("-")){
+           getToken();
+       }
+       else{
+           reportError(token);
+       }
+    }
+    private void mullOperation() {
+        if (token.getTokenName().equals("*") || token.getTokenName().equals("/") || token.getTokenName().equals("mod") || token.getTokenName().equals("div")){
+            getToken();
+        }
+        else{
+            reportError(token);
+        }
+    }
+
+    private void term() {
+       factor();
+       while (token.getTokenName().equals("*")||token.getTokenName().equals("/") || token.getTokenName().equals("mod") || token.getTokenName().equals("div")){
+           mullOperation();
+           factor();
+       }
+    }
+
+    private void factor() {
+       if (token.getTokenName().equals("(")){
+           getToken();
+           exp();
+           if (token.getTokenName().equals(")")){
+               getToken();
+           }
+           else {
+               reportError(token);
+           }
+
+       }
+       else if (Character.isLetter(token.getTokenName().charAt(0))){
+           name();
+       }
+       else if (isIntegerValue(token) || isRealValue(token)){
+           value();
+       }
+       else {
+           reportError(token);
+       }
+
+
+
+    }
+
+    private void whileStmt() {
+    }
+
+    private void repateStmt() {
+    }
+
+    private void callStmt() {
+        
+    }
+
+    private void exitStmt() {
+        
+    }
+
+    private void ifStmt() {
+        
+    }
+
+    private void writeStmt() {
+        if (token.getTokenName().equals("writeint") || token.getTokenName().equals("writereal") || token.getTokenName().equals("writechar")){
+                getToken();
+                if (token.getTokenName().equals("(")){
+                    getToken();
+                    writeList() ;
+
+                    if (token.getTokenName().equals(")")){
+                        getToken();
+                    }
+                    else {
+                        reportError(token);
+                    }
+                }
+                else {
+                    reportError(token);
+                }
+        }
+        else if (token.getTokenName().equals("writeln")){
+            getToken();
+        }
+        else {
+            reportError(token);
+        }
+    }
+
+    private void writeList() {
+    }
+
+    private void readStmt() {
+       if (token.getTokenName().equals("readint") || token.getTokenName().equals("readreal")|| token.getTokenName().equals("readchar")){
+           getToken();
+           if (token.getTokenName().equals("(")){
+               getToken();
+               nameList();
+               if (token.getTokenName().equals(")")){
+                   getToken();
+               }
+               else {
+                   reportError(token);
+               }
+           }
+           else {
+               reportError(token);
+           }
+       }
+       else if (token.getTokenName().equals("readln")) {
+                getToken();
+       }
+       else {
+           reportError(token);
+       }
+        
     }
 
     private void procedure_decl() {
@@ -191,5 +371,36 @@ public class Parser {
            reportError(token);
        }
     }
+    private boolean isIntegerValue(Token token) {
+        String tokenName = token.getTokenName();
+        if (tokenName == null || tokenName.isEmpty()) {
+            return false;
+        }
 
+        for (char c : tokenName.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private boolean isRealValue(Token token) {
+        String tokenName = token.getTokenName();
+        if (tokenName == null || tokenName.isEmpty()) {
+            return false;
+        }
+
+        boolean hasDecimalPoint = false;
+        for (char c : tokenName.toCharArray()) {
+            if (c == '.') {
+                if (hasDecimalPoint) { // Check for multiple decimal points
+                    return false;
+                }
+                hasDecimalPoint = true;
+            } else if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return hasDecimalPoint; // A real number must contain a decimal point
+    }
 }
