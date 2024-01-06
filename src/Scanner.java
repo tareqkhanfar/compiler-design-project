@@ -41,13 +41,25 @@ public class Scanner {
         }
 
     }
+    public void testReadFile () {
+        getChar();
+while (currectChar != (char) -1){
+    System.out.println(currectChar);
+getChar();
+        }
+System.out.println("Stop ");
+    }
 
     public void getChar() {
         try {
-            currectChar = (char) bufferedReader.read();
-            if (currectChar == '\n') {
-                lineNumber++;
-                currectChar = (char) bufferedReader.read();
+            int readValue = bufferedReader.read();
+            if (readValue != -1) {
+                currectChar = (char) readValue;
+                if (currectChar == '\n') {
+                    lineNumber++;
+                }
+            } else {
+                currectChar = (char) -1; // EOF indicator
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -55,14 +67,16 @@ public class Scanner {
     }
 
 
-    public LinkedList<String> startScan() {
 
-        while (currectChar != -1){
+
+    public LinkedList<Token> startScan() {
+        getChar();
+       while (currectChar != (char) -1){
             if (Character.isWhitespace(currectChar)){
                     getChar();
             }
-            else if ((currectChar>='A' && currectChar<='Z') || (currectChar >= 'a' && currectChar <='z')){
-               tokenLinkedList.add(checkIfKeyWordOrIdentifier());
+            else if ((currectChar >= 'A' && currectChar <= 'Z') || (currectChar >= 'a' && currectChar <= 'z')) {
+                tokenLinkedList.add(checkIfKeyWordOrIdentifier());
             }
             else if (Character.isDigit(currectChar)) {
                 tokenLinkedList.add(CheckIfIntegerOrReal());
@@ -71,15 +85,19 @@ public class Scanner {
                 checkTheOperator();
             }
 
+
         }
-        return null ;
+
+        return tokenLinkedList ;
     }
 
     private void checkTheOperator() {
+
         if (currectChar == ':') {
             getChar();
             if (currectChar == '='){
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , ":=" , lineNumber));
+                getChar();
             }
             else {
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , ":" , lineNumber));
@@ -89,6 +107,7 @@ public class Scanner {
             getChar();
             if (currectChar == '=') {
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , "<=" , lineNumber));
+                getChar();
             }
             else {
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , "<" , lineNumber));
@@ -98,6 +117,7 @@ public class Scanner {
             getChar();
             if (currectChar == '=') {
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , ">=" , lineNumber));
+                getChar();
             }
             else {
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , ">" , lineNumber));
@@ -108,13 +128,15 @@ public class Scanner {
             getChar();
             if (currectChar == '=') {
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , "|=" , lineNumber));
+                getChar();
             }
             else {
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , "|" , lineNumber));
             }
         }
-        else if (currectChar =='=' || currectChar == ';' || currectChar == ')' || currectChar == '(' || currectChar == '+' || currectChar == '-' || currectChar == '*' || currectChar =='/'){
+        else if (currectChar =='=' || currectChar == ';' || currectChar == ')' || currectChar == '(' || currectChar == '+' || currectChar == '-' || currectChar == '*' || currectChar =='/' || currectChar=='.'){
             tokenLinkedList.add(new Token(TokenType.OPERATOR , currectChar+"" , lineNumber));
+            getChar();
         }
 
     }
@@ -122,15 +144,19 @@ public class Scanner {
     private Token CheckIfIntegerOrReal() {
 
         StringBuilder tempToken = new StringBuilder() ;
-        tempToken.append(currectChar);
         boolean flag =false  ; // false == integer and true = real
         while (true) {
+
             if (currectChar=='.'){
                 tempToken.append('.');
                 flag = true;
+                getChar();
+
             }
             else if (Character.isDigit(currectChar)){
                 tempToken.append(currectChar);
+                getChar();
+
             }
             else {
                 break;
@@ -164,11 +190,11 @@ public class Scanner {
 
     private Token checkIfKeyWordOrIdentifier(){
         StringBuilder tempToken = new StringBuilder() ;
-        tempToken.append(currectChar);
         while (true) {
             if (Character.isLetterOrDigit(currectChar)){
                 tempToken.append(currectChar);
                 getChar();
+
             }
             else {
                 break;

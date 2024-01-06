@@ -38,4 +38,9 @@ public class Token {
     public void setLineNumber(long lineNumber) {
         this.lineNumber = lineNumber;
     }
+
+    @Override
+    public String toString() {
+        return tokenName+"   " ;
+    }
 }
