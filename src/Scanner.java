@@ -27,7 +27,8 @@ public class Scanner {
 
     private LinkedList<Token> tokenLinkedList = new LinkedList<>();
     public Scanner(){
-        this.KEY_WORDS = Set.of("MODULE", "CONST", "VAR", "PROCEDURE", "BEGIN", "END", "IF", "THEN", "ELSE", "CALL", "EXIT");
+        this.KEY_WORDS = Set.of("module", "begin", "end", "const", "var", "integer", "real", "char", "procedure", "mod", "div" , "readint", "readreal", "readchar", "readln", "writeint", "writereal", "writechar"
+                , "writeln", "if", "then", "elseif", "else", "while", "do", "loop", "until", "exit", "call");
         this.ArithmaticOperator = Set.of("+" , "-" , "*" , "/" );
         this.specialChar = Set.of(";"  , "=" , "(" , ")");
 

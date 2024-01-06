@@ -7,6 +7,9 @@ public class Main {
         Scanner scanner = new Scanner() ;
         scanner.readFile("G:\\D\\compiler\\compilerProject\\code.txt");
         LinkedList<Token> tokenLinkedList = scanner.startScan();
-       System.out.println(tokenLinkedList);
+        for (Token token : tokenLinkedList) {
+            System.out.println( " Type : ["+token.getType() + "] Token Name : [" +token.getTokenName()+"]" +"   Line ["+ token.getLineNumber()+"]");
+            System.out.println("_________________________________________________________________________________");
+        }
     }
 }

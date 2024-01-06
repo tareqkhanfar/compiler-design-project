@@ -1,4 +1,4 @@
-module myprogram;
+module myprogram ;
   const
     max=100;
   var
@@ -16,7 +16,7 @@ module myprogram;
     readint(num);
 	readreal(x);
 	if num<=max then
-	  num:=num+5
+	  num:=num+5.5
 	else
 	  num :=num-5
 	end;
