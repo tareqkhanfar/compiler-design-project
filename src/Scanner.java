@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class Scanner {
 
     private BufferedReader bufferedReader ;
-    private  Set<String> KEY_WORDS ;
+    public static   Set<String> KEY_WORDS ;
     private Set<String> ArithmaticOperator ;
     private Set<String> relationalOperator ;
     private Set<String> specialChar ;

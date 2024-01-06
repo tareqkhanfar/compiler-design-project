@@ -11,5 +11,10 @@ public class Main {
             System.out.println( " Type : ["+token.getType() + "] Token Name : [" +token.getTokenName()+"]" +"   Line ["+ token.getLineNumber()+"]");
             System.out.println("_________________________________________________________________________________");
         }
+
+
+        Parser parser = new Parser(tokenLinkedList);
+        parser.mainFunction();
+        System.out.println("Finished Successfully , there is no any syntax Error ");
     }
 }
