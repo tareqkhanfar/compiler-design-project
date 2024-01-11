@@ -68,6 +68,7 @@ public class Parser {
 
     private void block() {
 
+       System.out.println("token start block : " + token.getTokenName());
        if (token.getTokenName().equals("begin")){
            getToken();
        }
@@ -83,48 +84,66 @@ public class Parser {
            reportError(token);
        }
 
+       System.out.println("Exist from Block with token : " + token.getTokenName());
 
     }
 
     private void stmtList() {
         statement() ;
+        System.out.println("Start with stmt list = " + token.getTokenName());
         while (token.getTokenName().equals(";")){
             getToken();
             statement();
         }
+        System.out.println("exist from statment with token : " + token.getTokenName());
     }
 
     private void statement() {
-      if (token.getTokenName().equals("readint")){
-          readStmt() ;
-      }
-      else if (token.getTokenName().equals("writeint")){
-            writeStmt() ;
-      }
-      else if (token.getTokenName().equals("if")){
-          ifStmt() ;
-      }
-      else if (token.getTokenName().equals("loop")) {
-          repateStmt() ;
-      }
-      else if (token.getTokenName().equals("while")){
-          whileStmt();
-      }
-      else if (token.getTokenName().equals("exit")){
-          exitStmt();
-      }
-      else if (token.getTokenName().equals("call")){
-          callStmt();
-      }
-      else if (Character.isLetter(token.getTokenName().charAt(0))){
-          assStmt();
-      }
-      else if (token.getTokenName().equals(";")){
-          getToken();
-      }
-      else if (!token.getTokenName().equals(";")) {
-          reportError(token);
-      }
+       System.out.println("Token from statement : "+ token.getTokenName() + " with Type = " + token.getType());
+
+       if (token.getType().equals(TokenType.KEYWORD)){
+           if (token.getTokenName().startsWith("read")){
+               readStmt() ;
+               return;
+           }
+           else if (token.getTokenName().startsWith("write")){
+               writeStmt() ;
+               return;
+           }
+           else if (token.getTokenName().equals("if")){
+               ifStmt() ;
+               return;
+           }
+           else if (token.getTokenName().equals("loop")) {
+               repateStmt() ;
+               return;
+           }
+           else if (token.getTokenName().equals("while")){
+               whileStmt();
+               return;
+           }
+           else if (token.getTokenName().equals("exit")){
+               exitStmt();
+               return;
+           }
+           else if (token.getTokenName().equals("call")){
+               callStmt();
+               return;
+           }
+
+       }
+       else if (token.getType().equals(TokenType.IDENTIFIES)){
+           if (Character.isLetter(token.getTokenName().charAt(0))){
+               assStmt();
+               return;
+           }
+       }
+       else if (!token.getTokenName().equals(";")) {
+           System.out.println("MAAAAAAAAAAAAARS");
+           reportError(token);
+       }
+
+        System.out.println("Token from statement : "+ token.getTokenName());
 
     }
 
@@ -183,7 +202,7 @@ public class Parser {
            }
 
        }
-       else if (Character.isLetter(token.getTokenName().charAt(0))){
+       else if (isName(token)){
            name();
        }
        else if (isIntegerValue(token) || isRealValue(token)){
@@ -340,7 +359,7 @@ public class Parser {
     }
 
     private void nameValue() {
-      if (Character.isLetter(token.getTokenName().charAt(0))){
+      if (isName(token)){
           name();
       }
       else if (isIntegerValue(token) || isRealValue(token)){
@@ -386,7 +405,7 @@ public class Parser {
     }
 
     private void writeItem() {
-       if (Character.isLetter(token.getTokenName().charAt(0))){
+       if (isName(token)){
            name();
        }
        else if (isRealValue(token) || isIntegerValue(token)) {
@@ -428,6 +447,12 @@ public class Parser {
         declerations();
         block();
         name();
+        if (token.getTokenName().equals(";")){
+            getToken();
+        }
+        else {
+            reportError(token);
+        }
     }
 
     private void procedureHeading() {
