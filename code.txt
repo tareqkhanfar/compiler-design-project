@@ -25,17 +25,17 @@ var
 
         loop
             writeint(fadf,adfadf33,aqdfads,fvsg,ss,143,2342);;;
-            writereal(324243234,dfgdf);;
+            writereal(324243234,5,edfgdf);;
             writechar(dfgdgdfgfd,dfgd4423432,22);;;
             writeln;
-        until i |= 0;
+        until 9.7 |= i;
 
         while 1 < 1 do
             call p1;
             writechar(dfgdgdfgfd,dfgd4423432,22)
         end;
 
-        while 1 <= 1 do
+        while 1.7 <= 1 do
             call p1;
             writechar(dfgdgdfgfd,dfgd4423432,22);
         end;
@@ -69,4 +69,4 @@ var
 
  begin
     call p1;
- end all.test
+ end all.

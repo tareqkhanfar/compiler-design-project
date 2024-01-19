@@ -48,7 +48,6 @@ while (currectChar != (char) -1){
     System.out.println(currectChar);
 getChar();
         }
-System.out.println("Stop ");
     }
 
     public void getChar() {
@@ -60,7 +59,7 @@ System.out.println("Stop ");
                     lineNumber++;
                 }
             } else {
-                currectChar = (char) -1; // EOF indicator
+                currectChar = (char) -1;
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -73,7 +72,6 @@ System.out.println("Stop ");
     public LinkedList<Token> startScan() {
         getChar();
        while (currectChar != (char) -1){
-           System.out.println(currectChar);
             if (Character.isWhitespace(currectChar)){
                     getChar();
             }
@@ -148,7 +146,11 @@ System.out.println("Stop ");
     }
 
     private void reportError(char token , String correctError) {
+        System.out.println("###################################################################");
+
         System.err.println("Error with : "+token + " at line : " + lineNumber +" Excpected Error : " + correctError);
+        System.out.println("###################################################################");
+
         System.exit(1);
     }
 
@@ -169,7 +171,12 @@ System.out.println("Stop ");
                 getChar();
 
             }
+            else if (Character.isLetter(currectChar)){
+                reportError(currectChar , "Your Token is Not a Name. The Name must be a first char is letter  " +
+                        "\n and remaining chars will be  a letter and digits only");
+            }
             else {
+
                 break;
             }
         }

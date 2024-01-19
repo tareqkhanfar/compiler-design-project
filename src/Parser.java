@@ -23,7 +23,7 @@ public class Parser {
        if (token != null && token.getTokenName().equals(".")){
            getToken();
            if (token != null){
-               reportError(token , "There is a Some Codes after \" . \" that located in end of your program. so remove its to compile your code correctly.");
+               reportError(token , "There is a Some Codes after \" . \" that located in end of your program.\n so remove its to compile your code correctly.");
            }
        }
        else {
@@ -43,8 +43,13 @@ public class Parser {
    }
 
     private void reportError(Token token , String correctError) {
+        System.out.println("###################################################################");
         System.err.println("Error with : "+token.getTokenName() + " at line : " + token.getLineNumber() +" Excpected Error : " + correctError);
-       System.exit(1);
+
+        throw  new IllegalArgumentException("error") ;
+     //   System.out.println("###################################################################");
+
+      //  System.exit(1);
     }
 
     private void name() {
@@ -84,7 +89,6 @@ public class Parser {
 
     private void block() {
 
-       System.out.println("token start block : " + token.getTokenName());
        if (token.getTokenName().equals("begin")){
            getToken();
        }
@@ -100,22 +104,18 @@ public class Parser {
            reportError(token,"Your Token is Not equal end . The block must be ended with \"end keyword\"");
        }
 
-       System.out.println("Exist from Block with token : " + token.getTokenName());
 
     }
 
     private void stmtList() {
         statement() ;
-        System.out.println("Start with stmt list = " + token.getTokenName());
         while (token.getTokenName().equals(";")){
             getToken();
             statement();
         }
-        System.out.println("exist from statment with token : " + token.getTokenName());
     }
 
     private void statement() {
-       System.out.println("Token from statement : "+ token.getTokenName() + " with Type = " + token.getType());
 
        if (token.getType().equals(TokenType.KEYWORD)){
            if (token.getTokenName().startsWith("read")){
@@ -155,12 +155,10 @@ public class Parser {
            }
        }
        else if (!token.getTokenName().equals(";")) {
-           System.out.println("MAAAAAAAAAAAAARS");
            reportError(token , "Your Token is Not equal \";\" ");
        }
 
 
-        System.out.println("Token from statement : "+ token.getTokenName());
 
     }
 
@@ -422,6 +420,7 @@ public class Parser {
     }
 
     private void writeItem() {
+       System.out.println("token "+token.getTokenName());
        if (isName(token)){
            name();
        }
@@ -506,9 +505,7 @@ public class Parser {
        byte flag = 0 ;
         while (isStartOfVarItem(flag)) {
             flag =1 ;
-            System.out.println("when first entered : " + token.getTokenName());
             varItem();
-            System.out.println("Token before colon :" + token.getTokenName());
             if (token.getTokenName().equals(";")){
                 getToken();
             }
@@ -517,7 +514,6 @@ public class Parser {
             }
         }
 
-        System.out.println("Exist Token from Var = " + token.getTokenName());
     }
     private boolean isStartOfVarItem(byte flag) {
         if (token == null || token.getTokenName() == null || token.getTokenName().isEmpty()) {
@@ -540,12 +536,10 @@ public class Parser {
     private void varItem() {
 
        nameList() ;
-       System.out.println("token from var item : " + token.getTokenName());
        if (token.getTokenName().equals(":")){
            getToken();
        }
        else{
-           System.out.println("error 2 ");
 
            reportError(token , "Missing Colon \":\" After Name List");
        }
@@ -563,7 +557,6 @@ public class Parser {
           getToken();
       }
       else {
-          System.out.println("error 3 ");
 
           reportError(token , "Unexpected Token for Data Type must be (integer , real , char) ");
       }
@@ -572,7 +565,6 @@ public class Parser {
     private void nameList() {
 
        name();
-       System.out.println("After Execute NameList:" + token.getTokenName());
        while (token.getTokenName().equals(",")){
            getToken();
            name();
