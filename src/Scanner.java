@@ -73,6 +73,7 @@ System.out.println("Stop ");
     public LinkedList<Token> startScan() {
         getChar();
        while (currectChar != (char) -1){
+           System.out.println(currectChar);
             if (Character.isWhitespace(currectChar)){
                     getChar();
             }
@@ -135,7 +136,7 @@ System.out.println("Stop ");
                 tokenLinkedList.add(new Token(TokenType.OPERATOR , "|" , lineNumber));
             }
         }
-        else if (currectChar =='=' || currectChar == ';' || currectChar == ')' || currectChar == '(' || currectChar == '+' || currectChar == '-' || currectChar == '*' || currectChar =='/' || currectChar=='.'){
+        else if (currectChar =='=' || currectChar == ';' || currectChar == ')' || currectChar == '(' || currectChar == '+' || currectChar == '-' || currectChar == '*' || currectChar =='/' || currectChar=='.' || currectChar==','){
             tokenLinkedList.add(new Token(TokenType.OPERATOR , currectChar+"" , lineNumber));
             getChar();
         }

@@ -24,31 +24,33 @@ public class Parser {
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token , "Your Token not equal the '.' ");
        }
    }
 
-    private void reportError(Token token) {
-       //System.err.println("Error with : "+token.getTokenName() + " at line : " + token.getLineNumber() );
-       //System.exit(0);
-       throw new IllegalArgumentException("Error with : "+token.getTokenName() + " at line : " + token.getLineNumber());
+    private void reportError(Token token , String correctError) {
+        System.err.println("Error with : "+token.getTokenName() + " at line : " + token.getLineNumber() +" Excpected Error : " + correctError);
+        System.exit(1);
     }
 
     private void name() {
         if (isName(token)){
             getToken();
-
-            System.out.println("Token from Name : " + token.getTokenName());
         }
         else {
-            reportError(token);
+            reportError(token , "Your Token is Not a Name. The Name must be contain a letter and digits only ");
         }
     }
 
     private boolean isName(Token token) {
         String tokenName = token.getTokenName();
+
+
         if (tokenName == null || tokenName.isEmpty()) {
             return false;
+        }
+        if (Scanner.KEY_WORDS.contains(tokenName)){
+            return false ;
         }
 
         if (!Character.isLetter(tokenName.charAt(0))) {
@@ -73,7 +75,7 @@ public class Parser {
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token , "Your Token is Not equal begin . The block must be started with \"begin keyword\"");
        }
        stmtList();
 
@@ -81,7 +83,7 @@ public class Parser {
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token,"Your Token is Not equal end . The block must be ended with \"end keyword\"");
        }
 
        System.out.println("Exist from Block with token : " + token.getTokenName());
@@ -140,7 +142,7 @@ public class Parser {
        }
        else if (!token.getTokenName().equals(";")) {
            System.out.println("MAAAAAAAAAAAAARS");
-           reportError(token);
+           reportError(token , "Your Token is Not equal \";\" ");
        }
 
         System.out.println("Token from statement : "+ token.getTokenName());
@@ -153,7 +155,7 @@ public class Parser {
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token , "Your Token is Not equal \":=\" . The Expected Token must equal \":=\"");
        }
        exp();
     }
@@ -170,7 +172,7 @@ public class Parser {
            getToken();
        }
        else{
-           reportError(token);
+           reportError(token, "your token is not add Operation(+ , -) .");
        }
     }
     private void mullOperation() {
@@ -178,7 +180,7 @@ public class Parser {
             getToken();
         }
         else{
-            reportError(token);
+            reportError(token , "your token is not Mul Operation(* , / , mod , div).");
         }
     }
 
@@ -198,7 +200,7 @@ public class Parser {
                getToken();
            }
            else {
-               reportError(token);
+               reportError(token , "Missing Closing Parenthesis ");
            }
 
        }
@@ -209,7 +211,7 @@ public class Parser {
            value();
        }
        else {
-           reportError(token);
+           reportError(token , "Unexpected Token .  ");
        }
 
 
@@ -226,15 +228,15 @@ public class Parser {
                if (token.getTokenName().equals("end")){
                    getToken();
                }else {
-                   reportError(token);
+                   reportError(token , "Missing \"end\" Keyword:");
                }
            }
            else {
-               reportError(token);
+               reportError(token , "Missing \"do\" Keyword");
            }
 
        }else {
-           reportError(token);
+           reportError(token , "Unexpected Token in Place of \"while\"");
        }
     }
 
@@ -247,12 +249,12 @@ public class Parser {
                condition();
            }
            else {
-               reportError(token);
+               reportError(token , "Missing \"until\" Keyword:");
            }
 
        }
        else {
-           reportError(token);
+           reportError(token , "Unexpected Token in Place of \"loop\"");
        }
     }
 
@@ -261,7 +263,7 @@ public class Parser {
             getToken();
         }
         else {
-            reportError(token);
+            reportError(token , "Unexpected Token in Place of \"call\"");
         }
         name();
     }
@@ -270,7 +272,7 @@ public class Parser {
         if (token.getTokenName().equals("exit")){
             getToken();
         }else {
-            reportError(token);
+            reportError(token , "Unexpected Token in Place of \"exit\"");
         }
     }
 
@@ -289,15 +291,15 @@ public class Parser {
                    getToken();
                }
                else {
-                   reportError(token);
+                   reportError(token , "Missing \"end\" Keyword");
                }
            }
            else {
-               reportError(token);
+               reportError(token , "Missing \"then\" Keyword:");
            }
        }
        else {
-           reportError(token);
+           reportError(token , "Unexpected Token in Place of \"if\"");
        }
         
     }
@@ -318,7 +320,7 @@ public class Parser {
                getToken();
            }
            else {
-               reportError(token);
+               reportError(token , "Missing \"then\" Keyword in \"elseif\" Clause:");
            }
            stmtList();
 
@@ -354,7 +356,7 @@ public class Parser {
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token , "Unexpected Token for Relational Operation");
        }
     }
 
@@ -366,7 +368,7 @@ public class Parser {
           value();
       }
       else {
-          reportError(token);
+          reportError(token , "Unexpected Token Type . Your Token is not name or value ");
       }
     }
 
@@ -381,18 +383,18 @@ public class Parser {
                         getToken();
                     }
                     else {
-                        reportError(token);
+                        reportError(token ,"Missing Closing Parenthesis");
                     }
                 }
                 else {
-                    reportError(token);
+                    reportError(token , "Missing Opening Parenthesis After \"writeint\", \"writereal\", or \"writechar\"");
                 }
         }
         else if (token.getTokenName().equals("writeln")){
             getToken();
         }
         else {
-            reportError(token);
+            reportError(token , "Unexpected Token in Place of \"writeint\", \"writereal\", \"writechar\", or \"writeln\"");
         }
     }
 
@@ -412,7 +414,7 @@ public class Parser {
            value();
        }
        else {
-           reportError(token);
+           reportError(token , "Unexpected Token Type.");
        }
     }
 
@@ -426,18 +428,18 @@ public class Parser {
                    getToken();
                }
                else {
-                   reportError(token);
+                   reportError(token , "Missing Closing Parenthesis");
                }
            }
            else {
-               reportError(token);
+               reportError(token , "Missing Opening Parenthesis After \"readint\", \"readreal\", or \"readchar\"");
            }
        }
        else if (token.getTokenName().equals("readln")) {
                 getToken();
        }
        else {
-           reportError(token);
+           reportError(token , "Unexpected Token in Place of \"readint\", \"readreal\", \"readchar\", or \"readln\"");
        }
         
     }
@@ -451,7 +453,7 @@ public class Parser {
             getToken();
         }
         else {
-            reportError(token);
+            reportError(token , "Missing Semicolon at the End of Procedure Declaration.");
         }
     }
 
@@ -460,7 +462,7 @@ public class Parser {
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token , "Unexpected Token in Place of \"procedure\"");
        }
 
        name();
@@ -469,7 +471,7 @@ public class Parser {
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token , "Missing Semicolon After Procedure Name");
        }
     }
 
@@ -496,7 +498,7 @@ public class Parser {
                 getToken();
             }
             else{
-                reportError(token);
+                reportError(token , "Missing Semicolon After Variable Item");
             }
         }
 
@@ -530,7 +532,7 @@ public class Parser {
        else{
            System.out.println("error 2 ");
 
-           reportError(token);
+           reportError(token , "Missing Colon \":\" After Name List");
        }
        dataType() ;
     }
@@ -548,7 +550,7 @@ public class Parser {
       else {
           System.out.println("error 3 ");
 
-          reportError(token);
+          reportError(token , "Unexpected Token for Data Type must be (integer , real , char) ");
       }
     }
 
@@ -578,16 +580,15 @@ public class Parser {
             name();
             if (token.getTokenName().equals("=")) {
                 getToken();
-
                 value();
                 if (token.getTokenName().equals(";")) {
                     getToken();
 
                 } else {
-                    reportError(token);
+                    reportError(token , "Missing Semicolon \";\" After Constant Value");
                 }
             } else {
-                reportError(token);
+                reportError(token , "Missing Equals Sign \"=\" After Constant Name");
             }
         }
     }
@@ -600,7 +601,7 @@ public class Parser {
            RealValue();
        }
        else {
-           reportError(token);
+           reportError(token , "Unexpected Token Type for Value");
        }
     }
 
@@ -618,14 +619,14 @@ public class Parser {
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token,"Unexpected Token in Place of \"module\"");
        }
        name();
        if (token.getTokenName().equals(";")){
            getToken();
        }
        else {
-           reportError(token);
+           reportError(token , "Missing Semicolon After Module Name");
        }
     }
     private boolean isIntegerValue(Token token) {
