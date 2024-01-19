@@ -21,7 +21,7 @@ public class Scanner {
 
     private  char currectChar;
 
-    private long lineNumber  =1 ;
+    public static long lineNumber  =1 ;
    private static Pattern pattern ;
 
 
@@ -140,7 +140,16 @@ System.out.println("Stop ");
             tokenLinkedList.add(new Token(TokenType.OPERATOR , currectChar+"" , lineNumber));
             getChar();
         }
+        else {
+            reportError(currectChar , "Your Token is Not a Name. The Name must be contain a letter and digits only ");
 
+        }
+
+    }
+
+    private void reportError(char token , String correctError) {
+        System.err.println("Error with : "+token + " at line : " + lineNumber +" Excpected Error : " + correctError);
+        System.exit(1);
     }
 
     private Token CheckIfIntegerOrReal() {

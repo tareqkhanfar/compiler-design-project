@@ -20,17 +20,31 @@ public class Parser {
        block() ;
        name() ;
 
-       if (token.getTokenName().equals(".")){
+       if (token != null && token.getTokenName().equals(".")){
            getToken();
+           if (token != null){
+               reportError(token , "There is a Some Codes after \" . \" that located in end of your program. so remove its to compile your code correctly.");
+           }
        }
        else {
-           reportError(token , "Your Token not equal the '.' ");
+           if (token == null){
+               Token token1 = new Token() ;
+               token1.setTokenName("end for your program will be \".\" only");
+               token1.setLineNumber(Scanner.lineNumber);
+               reportError(token1, "Your Token not equal the '.' ");
+
+           }
+           else {
+               reportError(token, "Your Token not equal the '.' ");
+           }
+
+
        }
    }
 
     private void reportError(Token token , String correctError) {
         System.err.println("Error with : "+token.getTokenName() + " at line : " + token.getLineNumber() +" Excpected Error : " + correctError);
-        System.exit(1);
+       System.exit(1);
     }
 
     private void name() {
@@ -144,6 +158,7 @@ public class Parser {
            System.out.println("MAAAAAAAAAAAAARS");
            reportError(token , "Your Token is Not equal \";\" ");
        }
+
 
         System.out.println("Token from statement : "+ token.getTokenName());
 
