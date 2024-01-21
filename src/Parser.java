@@ -30,7 +30,7 @@ public class Parser {
            if (token == null){
                Token token1 = new Token() ;
                token1.setTokenName("end for your program will be \".\" only");
-               token1.setLineNumber(Scanner.lineNumber);
+               token1.setLineNumber(LexecalAnlyzer.lineNumber);
                reportError(token1, "Your Token not equal the '.' ");
 
            }
@@ -44,12 +44,11 @@ public class Parser {
 
     private void reportError(Token token , String correctError) {
         System.out.println("###################################################################");
-        System.err.println("Error with : "+token.getTokenName() + " at line : " + token.getLineNumber() +" Excpected Error : " + correctError);
+        System.out.println("Error with token : "+token.getTokenName() + "\n at line : " + token.getLineNumber() +"\n Details Error : " + correctError);
 
-        throw  new IllegalArgumentException("error") ;
-     //   System.out.println("###################################################################");
-
-      //  System.exit(1);
+       // throw  new IllegalArgumentException("error") ;
+       System.out.println("###################################################################");
+        System.exit(1);
     }
 
     private void name() {
@@ -57,7 +56,7 @@ public class Parser {
             getToken();
         }
         else {
-            reportError(token , "Your Token is Not a Name. The Name must be contain a letter and digits only ");
+            reportError(token , "Your Token is Not a Name. The Name must be contain a letter or digits only ");
         }
     }
 
@@ -68,7 +67,7 @@ public class Parser {
         if (tokenName == null || tokenName.isEmpty()) {
             return false;
         }
-        if (Scanner.KEY_WORDS.contains(tokenName)){
+        if (LexecalAnlyzer.KEY_WORDS.contains(tokenName)){
             return false ;
         }
 
@@ -420,7 +419,6 @@ public class Parser {
     }
 
     private void writeItem() {
-       System.out.println("token "+token.getTokenName());
        if (isName(token)){
            name();
        }
@@ -502,9 +500,9 @@ public class Parser {
     }
 
     private void varList() {
-       byte flag = 0 ;
-        while (isStartOfVarItem(flag)) {
-            flag =1 ;
+      // byte flag = 0 ;
+        while (isName(token)) {
+      //      flag =1 ;
             varItem();
             if (token.getTokenName().equals(";")){
                 getToken();
@@ -519,11 +517,11 @@ public class Parser {
         if (token == null || token.getTokenName() == null || token.getTokenName().isEmpty()) {
             return false;
         }
-        if (Scanner.KEY_WORDS.contains(token.getTokenName()) && flag == 0) {
+        if (LexecalAnlyzer.KEY_WORDS.contains(token.getTokenName()) && flag == 0) {
             return true ;
         }
 
-        if (Scanner.KEY_WORDS.contains(token.getTokenName())) {
+        if (LexecalAnlyzer.KEY_WORDS.contains(token.getTokenName())) {
             return false;
         }
         return Character.isLetter(token.getTokenName().charAt(0));
@@ -583,7 +581,7 @@ public class Parser {
 
     private void constList() {
 
-        while (!Scanner.KEY_WORDS.contains(token.getTokenName())) {
+        while (!LexecalAnlyzer.KEY_WORDS.contains(token.getTokenName())) {
             name();
             if (token.getTokenName().equals("=")) {
                 getToken();
@@ -638,10 +636,10 @@ public class Parser {
     }
     private boolean isIntegerValue(Token token) {
         String tokenName = token.getTokenName();
-        return tokenName.matches("\\d+");  // Regex to match one or more digits
+        return tokenName.matches("\\d+");
     }
     private boolean isRealValue(Token token) {
         String tokenName = token.getTokenName();
-        return tokenName.matches("\\d+\\.\\d+");  // Regex to match real numbers with a decimal point
+        return tokenName.matches("\\d+\\.\\d+");
     }
 }

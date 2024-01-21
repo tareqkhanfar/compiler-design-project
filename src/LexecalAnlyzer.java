@@ -2,14 +2,12 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Scanner {
+public class LexecalAnlyzer {
 
     private BufferedReader bufferedReader ;
     public static   Set<String> KEY_WORDS ;
@@ -26,7 +24,7 @@ public class Scanner {
 
 
     private LinkedList<Token> tokenLinkedList = new LinkedList<>();
-    public Scanner(){
+    public LexecalAnlyzer(){
         this.KEY_WORDS = Set.of("module", "begin", "end", "const", "var", "integer", "real", "char", "procedure", "mod", "div" , "readint", "readreal", "readchar", "readln", "writeint", "writereal", "writechar"
                 , "writeln", "if", "then", "elseif", "else", "while", "do", "loop", "until", "exit", "call");
         this.ArithmaticOperator = Set.of("+" , "-" , "*" , "/" );
@@ -139,7 +137,7 @@ getChar();
             getChar();
         }
         else {
-            reportError(currectChar , "Your Token is Not a Name. The Name must be contain a letter and digits only ");
+            reportError(currectChar , "Your Token is Not a Name. The Name must be contain a letter or digits only ");
 
         }
 
@@ -148,7 +146,7 @@ getChar();
     private void reportError(char token , String correctError) {
         System.out.println("###################################################################");
 
-        System.err.println("Error with : "+token + " at line : " + lineNumber +" Excpected Error : " + correctError);
+        System.out.println("Error with Token: "+token + "\n at line : " + lineNumber +" \n Error Details  : " + correctError);
         System.out.println("###################################################################");
 
         System.exit(1);
